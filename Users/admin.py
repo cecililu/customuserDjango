@@ -24,7 +24,6 @@ class CustomUserChangeForm(UserChangeForm):
 class CustomUserAdmin(UserAdmin):
     
  
-    
     list_display = ('username', 'email', 'is_staff', 'is_active', 'date_joined', 'updated_at', 'is_CDO', 'is_Municipality', 'is_Ward', 'is_cluster', )
     add_form = CustomUserCreationForm
     form = CustomUserChangeForm
@@ -33,15 +32,17 @@ class CustomUserAdmin(UserAdmin):
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('username', 'email', 'password1', 'password2', 'is_staff', 'is_active', 'is_CDO', 'is_Municipality', 'is_Ward', 'is_cluster', 'cluster_type')
+            'fields': ('username', 'email', 'password1', 'password2', 'is_staff', 'is_active', 'is_CDO', 'is_Municipality', 'is_Ward', 'is_cluster', 'cluster_type', 'ward', 'municipality')
         }),
     )
     fieldsets = (
         (None, {'fields': ('username', 'password')}),
         ('Personal info', {'fields': ('name' ,'email')}),
-        ('Permissions', {'fields': ('is_staff', 'is_active', 'is_superuser', 'is_CDO', 'is_Municipality', 'is_Ward', 'is_cluster', 'cluster_type', 'groups', 'user_permissions')}),
+        ('Permissions', {'fields': ('is_staff', 'is_active', 'is_superuser', 'is_CDO', 'is_Municipality', 'is_Ward', 'is_cluster', 'cluster_type', 'groups', 'user_permissions', 'ward', 'municipality')}),
         ('Important dates', {'fields': ('last_login', 'date_joined')}),
     )
     list_filter = ('is_staff', 'is_active', 'is_superuser', 'is_CDO', 'is_Municipality', 'is_Ward', 'is_cluster')
 
 admin.site.register(CustomUser, CustomUserAdmin)
+admin.site.register(Ward)
+admin.site.register(Municipality)

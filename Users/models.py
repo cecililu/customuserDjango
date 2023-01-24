@@ -85,13 +85,24 @@ class CustomUserManager(BaseUserManager):
 
 class ClusterType(models.Model):
     name = models.CharField(max_length=255)
-
-class Ward(models.Model):
-    name = models.CharField(max_length=255)
+    def __str__(self):
+        return self.name
 
 class Municipality(models.Model):
     name = models.CharField(max_length=255)
+    def __str__(self):
+        return self.name
+        
+class Ward(models.Model):
+    name = models.CharField(max_length=255)
+    municipality=models.ForeignKey(Municipality,on_delete=models.CASCADE)
+    def __str__(self):
+        return self.name
 
+class TestDisasterModel(models.Model):
+    name= name = models.CharField(max_length=255)
+    municipality=models.ForeignKey(Municipality,on_delete=models.CASCADE)
+    ward=models.ForeignKey(Ward,on_delete=models.CASCADE)
     
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     
