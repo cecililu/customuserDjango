@@ -83,6 +83,16 @@ class CustomUserManager(BaseUserManager):
     #     return self.none()
 
 
+class ClusterType(models.Model):
+    name = models.CharField(max_length=255)
+
+class Ward(models.Model):
+    name = models.CharField(max_length=255)
+
+class Municipality(models.Model):
+    name = models.CharField(max_length=255)
+
+    
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     
     username = models.CharField(
@@ -115,10 +125,20 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         ),
     )
     date_joined = models.DateTimeField(_("date joined"), default=timezone.now)
-    
+    updated_at = models.DateTimeField(auto_now=True)
+    is_CDO = models.BooleanField(default=False)
+    is_Municipality = models.BooleanField(default=False)
+    is_Ward = models.BooleanField(default=False)
+    is_cluster = models.BooleanField(default=False)
+    cluster_type = models.ForeignKey(ClusterType, on_delete=models.CASCADE, null=True, blank=True)
+    ward = models.ForeignKey(Ward, on_delete=models.CASCADE, null=True, blank=True)
+    municipality = models.ForeignKey(Municipality, on_delete=models.CASCADE, null=True, blank=True)
     
     objects = CustomUserManager()
 
     EMAIL_FIELD = "email"
     USERNAME_FIELD = "username"
     REQUIRED_FIELDS = ["email"]
+    
+    def __str__(self):
+        return self.username
