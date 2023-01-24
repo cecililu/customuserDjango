@@ -94,15 +94,15 @@ class Municipality(models.Model):
         return self.name
         
 class Ward(models.Model):
-    name = models.CharField(max_length=255)
-    municipality=models.ForeignKey(Municipality,on_delete=models.CASCADE)
+    name = models.CharField(max_length=255,null=True,blank=True)
+    municipality=models.ForeignKey(Municipality,on_delete=models.CASCADE,null=True,blank=True)
     def __str__(self):
         return self.name
 
 class TestDisasterModel(models.Model):
     name= name = models.CharField(max_length=255)
-    municipality=models.ForeignKey(Municipality,on_delete=models.CASCADE)
-    ward=models.ForeignKey(Ward,on_delete=models.CASCADE)
+    municipality=models.ForeignKey(Municipality,on_delete=models.CASCADE,null=True,blank=True)
+    ward=models.ForeignKey(Ward,on_delete=models.CASCADE,null=True,blank=True)
     
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     
