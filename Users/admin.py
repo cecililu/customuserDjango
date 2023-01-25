@@ -46,3 +46,5 @@ class CustomUserAdmin(UserAdmin):
 admin.site.register(CustomUser, CustomUserAdmin)
 admin.site.register(Ward)
 admin.site.register(Municipality)
+admin.site.register(TestDisasterModel)
+admin.site.register(ActivityLog)

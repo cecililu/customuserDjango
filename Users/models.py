@@ -83,16 +83,20 @@ class CustomUserManager(BaseUserManager):
     #     return self.none()
 
 
+
+
+
+
 class ClusterType(models.Model):
     name = models.CharField(max_length=255)
     def __str__(self):
         return self.name
-
+    
 class Municipality(models.Model):
     name = models.CharField(max_length=255)
     def __str__(self):
         return self.name
-        
+         
 class Ward(models.Model):
     name = models.CharField(max_length=255,null=True,blank=True)
     municipality=models.ForeignKey(Municipality,on_delete=models.CASCADE,null=True,blank=True)
@@ -104,6 +108,9 @@ class TestDisasterModel(models.Model):
     municipality=models.ForeignKey(Municipality,on_delete=models.CASCADE,null=True,blank=True)
     ward=models.ForeignKey(Ward,on_delete=models.CASCADE,null=True,blank=True)
     
+    def __str__(self):
+        return self.name
+ 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     
     username = models.CharField(
@@ -153,3 +160,27 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     
     def __str__(self):
         return self.username
+    
+# activity log and signal
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from .models import TestDisasterModel
+
+class ActivityLog(models.Model):
+    action_name = models.CharField(max_length=255)
+    deployed_inventory = models.IntegerField()
+    time_of_action = models.DateTimeField(auto_now_add=True)
+    disaster = models.ForeignKey(TestDisasterModel, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.action_name
+
+@receiver(post_save, sender=TestDisasterModel)
+def create_activity_log(sender, instance, created, **kwargs):
+    if created:
+        ActivityLog.objects.create(
+            action_name='disasterstart', 
+            deployed_inventory=0, 
+            time_of_action=timezone.now(), 
+            disaster=instance
+        )
