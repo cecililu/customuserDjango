@@ -1,10 +1,17 @@
 from django.urls import include, path
 from .views import *
-from rest_framework.routers import DefaultRouter
+from rest_framework.routers import DefaultRouter,SimpleRouter
 
-router=DefaultRouter()
-router.register('',ViewTest)
+routerMain=DefaultRouter()
+routerMain.register('main',ViewTest)
 
+routerActlog=DefaultRouter()
+routerActlog.register('act',ActivityLogView)
+
+
+
+# router.register('norA',norA)
 urlpatterns = [
-    path("", include(router.urls)),
+    path("", include(routerMain.urls)),
+    path("", include(routerActlog.urls)),
 ]

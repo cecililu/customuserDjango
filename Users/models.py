@@ -166,12 +166,12 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from .models import TestDisasterModel
 
+
 class ActivityLog(models.Model):
     action_name = models.CharField(max_length=255)
     deployed_inventory = models.IntegerField()
     time_of_action = models.DateTimeField(auto_now_add=True)
     disaster = models.ForeignKey(TestDisasterModel, on_delete=models.CASCADE)
-
     def __str__(self):
         return self.action_name
 
@@ -184,3 +184,40 @@ def create_activity_log(sender, instance, created, **kwargs):
             time_of_action=timezone.now(), 
             disaster=instance
         )
+#Action
+
+#common volunter list
+class Volunters(models.Model):
+    name=models.CharField(max_length=100)
+    contact=models.CharField(max_length=100)
+    availability=models.BooleanField(default=True)
+    isdeployed=models.BooleanField(default=False)
+
+class MunicipalPolice(models.Model):
+    name=models.CharField(max_length=100)
+       
+#response Team for Ward iniciatives    
+class WardResponseTeams(models.Model):
+    name=models.CharField(max_length=100)
+    disaster=models.ForeignKey(TestDisasterModel,on_delete=models.CASCADE)
+    deployed=models.BooleanField(default=False)
+
+class WardResponseTeamMembers(models.Model):
+    volunters=models.ForeignKey(Volunters,on_delete=models.CASCADE,blank=True,null=True)
+    team=models.ForeignKey(WardResponseTeams,on_delete=models.CASCADE,blank=True,null=True)
+    
+     
+#response Team for Municipal iniciatives
+class MuniResponseTeams(models.Model):
+    name=models.CharField(max_length=100,blank=True,null=True)
+    disaster=models.ForeignKey(TestDisasterModel,on_delete=models.CASCADE)
+    deployed=models.BooleanField(default=False)
+    
+    
+class MuniResponseTeamMembers(models.Model):
+    volunters=models.ForeignKey(Volunters,on_delete=models.CASCADE,blank=True,null=True)
+    team=models.ForeignKey(WardResponseTeams,on_delete=models.CASCADE,blank=True,null=True)
+    municipal_police= models.ForeignKey(MunicipalPolice,on_delete=models.CASCADE)
+    
+
+
